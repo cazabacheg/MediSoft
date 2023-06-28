@@ -1,0 +1,330 @@
+version: "2.1"
+services:
+  api_gateway:
+    container_name: apigatewaydock
+    image: cazabacheg/apigateway
+    build: .
+    ports: 
+      - 8070:8080
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 40s
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+      eureka_server:
+        condition: service_healthy  
+      config_server_hospital:
+        condition: service_healthy
+      api_cita:
+        condition: service_healthy
+      api_especialidad:
+        condition: service_healthy
+      api_usuario:
+        condition: service_healthy
+      api_especialidad2:
+        condition: service_healthy
+      api_usuario2:
+        condition: service_healthy
+      api_cita2:
+        condition: service_healthy
+
+  app_hospital:
+    container_name: apphospitaldock
+    image: cazabacheg/apphospital
+    build: .
+    ports: 
+      - 8181:8080
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 40s
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+      eureka_server:
+        condition: service_healthy  
+      config_server_hospital:
+        condition: service_healthy
+      api_cita:
+        condition: service_healthy
+      api_especialidad:
+        condition: service_healthy
+      api_usuario:
+        condition: service_healthy
+      api_especialidad2:
+        condition: service_healthy
+      api_usuario2:
+        condition: service_healthy
+      api_cita2:
+        condition: service_healthy
+
+  api_cita:
+    container_name: apicitadock
+    image: cazabacheg/apicita
+    build: .
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 40s
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+      eureka_server:
+        condition: service_healthy  
+      config_server_hospital:
+        condition: service_healthy
+      api_especialidad:
+        condition: service_healthy
+      api_usuario:
+        condition: service_healthy
+      api_especialidad2:
+        condition: service_healthy
+      api_usuario2:
+        condition: service_healthy
+
+  api_cita2:
+    container_name: apicitadock2
+    image: cazabacheg/apicita
+    build: .
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 40s
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+      eureka_server:
+        condition: service_healthy  
+      config_server_hospital:
+        condition: service_healthy
+      api_especialidad:
+        condition: service_healthy
+      api_usuario:
+        condition: service_healthy
+      api_especialidad2:
+        condition: service_healthy
+      api_usuario2:
+        condition: service_healthy
+
+  api_especialidad:
+    container_name: apiespecialidaddock
+    image: cazabacheg/apiespecialidad
+    build: .
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 40s
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+      eureka_server:
+        condition: service_healthy  
+      config_server_hospital:
+        condition: service_healthy
+
+  api_especialidad2:
+    container_name: apiespecialidaddock2
+    image: cazabacheg/apiespecialidad
+    build: .
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 40s
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+      eureka_server:
+        condition: service_healthy  
+      config_server_hospital:
+        condition: service_healthy
+
+  api_usuario:
+    container_name: apiusuariodock
+    image: cazabacheg/apiusuario
+    build: .
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 40s
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+      eureka_server:
+        condition: service_healthy  
+      config_server_hospital:
+        condition: service_healthy
+
+  api_usuario2:
+    container_name: apiusuariodock2
+    image: cazabacheg/apiusuario
+    build: .
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 40s
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+      eureka_server:
+        condition: service_healthy  
+      config_server_hospital:
+        condition: service_healthy
+
+  config_server_hospital:
+    container_name: configserverhospitaldock
+    image: cazabacheg/configserverhospital
+    build: .
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 40s
+    healthcheck:
+      test: "curl --fail --silent localhost:9999/actuator/health | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    depends_on:
+      eureka_server:
+        restart: true
+        condition: service_healthy
+        
+  eureka_server:
+    container_name: eurekaserverdock
+    image: cazabacheg/eurekaserverhospital
+    build: .
+    ports: 
+      - 8888:8761
+    healthcheck:
+      test: "curl --fail --silent localhost:8761/actuator/health | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      logstash:
+        condition: service_healthy
+
+  mysqldb:
+    container_name: mysqldock
+    image: mysql:latest
+    build: .
+    ports:
+      - 3308:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysql
+    volumes:
+      - db_hospital:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  elasticsearch:
+    image: elasticsearch:8.8.1
+    container_name: elasticsearchdock
+    environment:
+        - bootstrap.memory_lock=true
+        - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        - "discovery.type=single-node"
+        - xpack.security.enabled=false
+    healthcheck:
+      test: "curl --fail http://localhost:9200/_cluster/health?pretty"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+
+  kibana:
+    image: kibana:8.8.1
+    container_name: kibanadock
+    ports:
+      - "5601:5601"
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch:9200"]'
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  logstash:
+    image: logstash:8.8.1
+    container_name: logstashdock
+    volumes:
+      - ./Servicios/ELK/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./Servicios/ELK/logstash/pipeline:/usr/share/logstash/pipeline:ro
+    healthcheck:
+      test: "curl --fail localhost:9600"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+volumes:
+  db_hospital:
+
+  elasticsearch_data:
+    driver: local
